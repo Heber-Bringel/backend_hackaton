@@ -1,0 +1,40 @@
+import { EmailRepository } from '../repositories/EmailRepository.js';
+import type { Email } from '../../generated/prisma/client.js';
+import type { InboundEmailData } from '../types/emailTypes/InboundEmailData.js';
+import type { ClassificationData } from '../types/emailTypes/ClassificationData.js';
+
+export class EmailService {
+    private emailRepository: EmailRepository;
+
+    constructor() {
+        this.emailRepository = new EmailRepository();
+    }
+
+    public async processInboundEmail(data: InboundEmailData): Promise<Email> {
+        return this.emailRepository.createInboundEmail(data);
+    }
+
+    public async getAllEmails(): Promise<Email[]> {
+        return this.emailRepository.findAllEmails();
+    }
+
+    public async findEmailById(id: string): Promise<Email | null> {
+        const email = await this.emailRepository.findEmailById(id);
+
+        if(!email) {
+            throw new Error('Email não encontrado.');
+        }
+        return email;
+    }
+
+    public async getPendingEmails(): Promise<Email[]> {
+        return this.emailRepository.findPendingEmails();
+    }
+
+    public async classifyEmail(id: string, data: ClassificationData): Promise<Email> {
+        if (!data.estado || !data.municipio) {
+            throw new Error('Estado e Município são obrigatórios para classificação.');
+        }
+        return this.emailRepository.classifyEmail(id, data);
+    }
+}

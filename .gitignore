@@ -1,0 +1,18 @@
+# Diretórios de Dependências e Build
+/node_modules
+/dist
+/generated 
+
+# Segredos e Configurações de Ambiente (CRUCIAL)
+.env
+.env.*
+
+# Logs e Cache
+npm-debug.log*
+yarn-error.log*
+.DS_Store # (Para usuários macOS)
+
+# Arquivos do TypeScript (Se o build for para dist/)
+# /dist é suficiente
+# *.js
+# *.d.ts
