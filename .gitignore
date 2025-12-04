@@ -11,6 +11,7 @@
 npm-debug.log*
 yarn-error.log*
 .DS_Store # (Para usuários macOS)
+ngrok.yml
 
 # Arquivos do TypeScript (Se o build for para dist/)
 # /dist é suficiente
