@@ -2,19 +2,21 @@ import { prisma } from "../../lib/prisma.js"
 import type { Email } from '../../generated/prisma/client.js'; 
 import type { InboundEmailData } from "../types/emailTypes/InboundEmailData.js";
 import type { ClassificationData } from "../types/emailTypes/ClassificationData.js"
+import type { ManualEmailDataWithSystemsFields } from "../types/emailTypes/ManualEmailData.js";
 
 
 export class EmailRepository {
     // SALVA E-MAIL CAPTURADO (POST - Webhook)
     public async createInboundEmail(data: InboundEmailData): Promise<Email> {
-        const timestampMs = parseInt(data.timestamp) * 1000;
+        const timestampMs = parseInt(data.dataEnvio) * 1000;
 
         const emailToSave = {
-            remetente: data.sender,
-            destinatario: data.recipient,
-            assunto: data.subject,
-            corpoMensagem: data['body-plain'],
+            remetente: data.remetente,
+            destinatario: data.destinatario,
+            assunto: data.assunto,
+            corpoMensagem: data.corpoMensagem,
             dataEnvio: new Date(timestampMs), 
+            status: "PENDENTE"
         };
 
         if (isNaN(timestampMs) || timestampMs === 0) {
@@ -23,6 +25,20 @@ export class EmailRepository {
 
         return await prisma.email.create({ data: emailToSave });
     }
+
+public async createManualEmail(data: ManualEmailDataWithSystemsFields): Promise<Email> {
+
+    const emailToSave = {
+        remetente: data.remetente,
+        destinatario: data.destinatario,
+        assunto: data.assunto,
+        dataEnvio: data.dataEnvio, 
+        status: data.status,
+        corpoMensagem: data.corpoMensagem ?? "", 
+    };
+
+    return await prisma.email.create({ data: emailToSave }); 
+}
 
     public async findAllEmails(): Promise<Email[]> {
         return await prisma.email.findMany({

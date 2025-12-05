@@ -5,7 +5,11 @@ const MAILGUN_SIGNING_KEY = process.env.MAILGUN_SIGNING_KEY;
 
 export const checkMailgunSignature = (req: Request, res: Response, next: NextFunction) => {
     
-    // O Mailgun envia os dados de segurança no corpo (body)
+    if(!req.body) {
+        return res.status(400).json({ error: 'Corpo da requisição vazio.' });
+    }
+
+    // Envia os dados de segurança no corpo (body)
     const { signature, timestamp, token } = req.body;
 
     if (!MAILGUN_SIGNING_KEY || !signature || !timestamp || !token) {
@@ -18,7 +22,7 @@ export const checkMailgunSignature = (req: Request, res: Response, next: NextFun
                        .update(timestamp + token)
                        .digest('hex');
 
-    // Compara a assinatura calculada com a assinatura enviada pelo Mailgun
+    // Compara a assinatura calculada com a assinatura enviada pelo webhook
     if (hash === signature) {
         // Se a assinatura for válida, a requisição é autêntica
         next(); 
