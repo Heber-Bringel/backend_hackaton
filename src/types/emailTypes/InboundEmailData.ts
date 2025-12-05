@@ -1,7 +1,8 @@
 export type InboundEmailData = {
-    sender: string;
-    to: string;
-    subject: string;
-    body: string;
-    timestamp: string;
+    remetente: string;
+    destinatario: string;
+    assunto: string;
+    corpoMensagem: string;
+    dataEnvio: string;
+    status: string;
 }

@@ -10,13 +10,16 @@ export class EmailController {
 
     // POST /webhook/inbound-email
     public async handleInboundWebhook(req: Request, res: Response) {
+        const corpoMensagem = req.body["body-plain"] ?? "";
+
         try {
             const payload = {
-                sender: req.body.From,
-                to: req.body.To,
-                subject: req.body.subject,
-                body: req.body["body-plain"],
-                timestamp: req.body.timestamp
+                remetente: req.body.From,
+                destinatario: req.body.To,
+                assunto: req.body.subject,
+                corpoMensagem: corpoMensagem,
+                dataEnvio: req.body.timestamp,
+                status: req.body.status
             };
 
             const result = await this.emailService.processInboundEmail(payload);

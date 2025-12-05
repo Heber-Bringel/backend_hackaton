@@ -7,14 +7,15 @@ import type { ClassificationData } from "../types/emailTypes/ClassificationData.
 export class EmailRepository {
     // SALVA E-MAIL CAPTURADO (POST - Webhook)
     public async createInboundEmail(data: InboundEmailData): Promise<Email> {
-        const timestampMs = parseInt(data.timestamp) * 1000;
+        const timestampMs = parseInt(data.dataEnvio) * 1000;
 
         const emailToSave = {
-            remetente: data.sender,
-            destinatario: data.to,
-            assunto: data.subject,
-            corpoMensagem: data.body,
+            remetente: data.remetente,
+            destinatario: data.destinatario,
+            assunto: data.assunto,
+            corpoMensagem: data.corpoMensagem,
             dataEnvio: new Date(timestampMs), 
+            status: "PENDENTE"
         };
 
         if (isNaN(timestampMs) || timestampMs === 0) {
