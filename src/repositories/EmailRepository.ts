@@ -7,14 +7,21 @@ import type { ClassificationData } from "../types/emailTypes/ClassificationData.
 export class EmailRepository {
     // SALVA E-MAIL CAPTURADO (POST - Webhook)
     public async createInboundEmail(data: InboundEmailData): Promise<Email> {
+        const timestampMs = parseInt(data.timestamp) * 1000;
+
         const emailToSave = {
-            remetente: data.from,
-            destinatario: data.To,
+            remetente: data.sender,
+            destinatario: data.recipient,
             assunto: data.subject,
             corpoMensagem: data['body-plain'],
-            dataEnvio: new Date(parseInt(data.timestamp) * 1000), 
+            dataEnvio: new Date(timestampMs), 
         };
-        return await prisma.email.create({ data: emailToSave }); // Usa a instância importada
+
+        if (isNaN(timestampMs) || timestampMs === 0) {
+            throw new Error("Dados de data inválidos recebidos do webhook.");
+        }
+
+        return await prisma.email.create({ data: emailToSave });
     }
 
     public async findAllEmails(): Promise<Email[]> {
@@ -49,7 +56,7 @@ export class EmailRepository {
 
     // ATUALIZA/CLASSIFICA E-MAIL (PUT - Tela 2)
     public async classifyEmail(id: string, data: ClassificationData): Promise<Email> {
-        return await prisma.email.update({ // Usa a instância importada
+        return await prisma.email.update({
             where: { id },
             data: {
                 estado: data.estado,
