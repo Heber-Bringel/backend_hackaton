@@ -10,7 +10,7 @@ export class EmailController {
 
     // POST /webhook/inbound-email
     public async handleInboundWebhook(req: Request, res: Response) {
-        // Implementação da Validação de Segurança do Mailgun AQUI
+        // Implementar Validação de Segurança
         
         try {
             const result = await this.emailService.processInboundEmail(req.body);
@@ -52,7 +52,7 @@ export class EmailController {
             if(error.message.includes("não encontrado")) {
                 return res.status(400).json({ error: error.message });
             }
-            return res.status(500).json({ error: "Falha ao classificar e-mail." });
+            return res.status(500).json({ error: "Falha ao buscar o e-mail." });
         }
     }
 
