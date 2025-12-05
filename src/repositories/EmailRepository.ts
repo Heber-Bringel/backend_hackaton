@@ -37,7 +37,7 @@ public async createManualEmail(data: ManualEmailDataWithSystemsFields): Promise<
         corpoMensagem: data.corpoMensagem ?? "", 
     };
 
-    return await prisma.email.create({ data: emailToSave as any }); 
+    return await prisma.email.create({ data: emailToSave }); 
 }
 
     public async findAllEmails(): Promise<Email[]> {

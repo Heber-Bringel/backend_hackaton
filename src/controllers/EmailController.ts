@@ -1,6 +1,7 @@
 import type { Request, Response } from 'express';
 import type { ManualEmailData } from '../types/emailTypes/ManualEmailData.js';
 import { EmailService } from '../services/EmailService.js';
+import { extractEmailAddress } from '../utils/NewFormact.js';
 
 export class EmailController {
     private emailService: EmailService;
@@ -13,10 +14,13 @@ export class EmailController {
     public async handleInboundWebhook(req: Request, res: Response) {
         const corpoMensagem = req.body["body-plain"] ?? "";
 
+        const remetenteFormatado = extractEmailAddress(req.body.data.remetente);
+        const destinatarioFormatado = extractEmailAddress(req.body.data.destinatario);
+
         try {
             const payload = {
-                remetente: req.body.From,
-                destinatario: req.body.To,
+                remetente: remetenteFormatado,
+                destinatario: destinatarioFormatado,
                 assunto: req.body.subject,
                 corpoMensagem: corpoMensagem,
                 dataEnvio: req.body.timestamp,
@@ -25,36 +29,36 @@ export class EmailController {
 
             const result = await this.emailService.processInboundEmail(payload);
             return res.status(200).json(result);
-            
+
         } catch (error: any) {
             console.error('Erro no webhook:', error);
             return res.status(500).json({ error: 'Falha interna.' });
         }
     }
 
-public async createManualEmail(req: Request, res: Response) {
+    public async createManualEmail(req: Request, res: Response) {
         // 1. Receber e Tratar Dados
-        const { 
-            remetente, 
-            destinatario, 
-            assunto, 
-            corpoMensagem 
+        const {
+            remetente,
+            destinatario,
+            assunto,
+            corpoMensagem
         }: ManualEmailData = req.body;
 
         // 2. Validação Básica
         if (!remetente || !destinatario || !assunto) {
-            return res.status(400).json({ 
-                error: 'Os campos remetente, destinatario e assunto são obrigatórios.' 
+            return res.status(400).json({
+                error: 'Os campos remetente, destinatario e assunto são obrigatórios.'
             });
         }
-        
+
         // 3. Preparar o payload com fallback garantido
         const payload: ManualEmailData = {
             remetente,
             destinatario,
             assunto,
             // Garante que o corpoMensagem é uma string, mesmo que vazia
-            corpoMensagem: corpoMensagem ?? "" 
+            corpoMensagem: corpoMensagem ?? ""
         };
 
         try {
@@ -68,7 +72,6 @@ public async createManualEmail(req: Request, res: Response) {
             return res.status(500).json({ error: 'Falha interna ao salvar o e-mail.' });
         }
     }
-
 
     // GET /emails/pendentes (Tela 2)
     public async listPendingEmails(req: Request, res: Response) {
