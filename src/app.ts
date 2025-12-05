@@ -30,9 +30,7 @@ const corsOptions: cors.CorsOptions = {
 
 app.use(cors(corsOptions));
 
-// Middleware necessário para Express e Mailgun:
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true })); 
+app.use(express.json());
 
 // Define a rota base /api e anexa o router de e-mails
 app.use('/api', emailRoutes); 
