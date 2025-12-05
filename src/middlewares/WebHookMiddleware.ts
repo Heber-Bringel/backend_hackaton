@@ -5,6 +5,10 @@ const MAILGUN_SIGNING_KEY = process.env.MAILGUN_SIGNING_KEY;
 
 export const checkMailgunSignature = (req: Request, res: Response, next: NextFunction) => {
     
+    if(!req.body) {
+        return res.status(400).json({ error: 'Corpo da requisição vazio.' });
+    }
+
     // O Mailgun envia os dados de segurança no corpo (body)
     const { signature, timestamp, token } = req.body;
 
