@@ -2,6 +2,7 @@ import  Router  from 'express';
 import { EmailController } from '../controllers/EmailController.js';
 import { checkApiKey } from '../middlewares/AuthMiddleware.js';
 import { EmailService } from '../services/EmailService.js';
+import { checkMailgunSignature } from '../middlewares/WebHookMiddleware.js';
 
 const router = Router();
 
@@ -12,7 +13,7 @@ const emailService: EmailService = new EmailService();
 const emailController = new EmailController(emailService);
 
 // Rota : Captura Automática (Mailgun Webhook)
-router.post('/webhook/inbound-email', emailController.handleInboundWebhook.bind(emailController));
+router.post('/webhook/inbound-email', checkMailgunSignature, emailController.handleInboundWebhook.bind(emailController));
 
 // Rota : Visualizar E-mails Pendentes (Tela 2)
 router.get('/emails/pendentes', checkApiKey, emailController.listPendingEmails.bind(emailController));
