@@ -1,4 +1,5 @@
 import type { Request, Response } from 'express';
+import type { ManualEmailData } from '../types/emailTypes/ManualEmailData.js';
 import { EmailService } from '../services/EmailService.js';
 
 export class EmailController {
@@ -30,6 +31,44 @@ export class EmailController {
             return res.status(500).json({ error: 'Falha interna.' });
         }
     }
+
+public async createManualEmail(req: Request, res: Response) {
+        // 1. Receber e Tratar Dados
+        const { 
+            remetente, 
+            destinatario, 
+            assunto, 
+            corpoMensagem 
+        }: ManualEmailData = req.body;
+
+        // 2. Validação Básica
+        if (!remetente || !destinatario || !assunto) {
+            return res.status(400).json({ 
+                error: 'Os campos remetente, destinatario e assunto são obrigatórios.' 
+            });
+        }
+        
+        // 3. Preparar o payload com fallback garantido
+        const payload: ManualEmailData = {
+            remetente,
+            destinatario,
+            assunto,
+            // Garante que o corpoMensagem é uma string, mesmo que vazia
+            corpoMensagem: corpoMensagem ?? "" 
+        };
+
+        try {
+            // 4. Chamar o Service
+            const result = await this.emailService.saveManualEmail(payload);
+
+            return res.status(201).json(result);
+
+        } catch (error) {
+            console.error('Erro ao criar email manual:', error);
+            return res.status(500).json({ error: 'Falha interna ao salvar o e-mail.' });
+        }
+    }
+
 
     // GET /emails/pendentes (Tela 2)
     public async listPendingEmails(req: Request, res: Response) {

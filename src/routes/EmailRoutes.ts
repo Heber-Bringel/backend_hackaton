@@ -15,6 +15,9 @@ const emailController = new EmailController(emailService);
 // Rota : Captura Automática (Mailgun Webhook)
 router.post('/webhook/inbound-email', checkMailgunSignature, emailController.handleInboundWebhook.bind(emailController));
 
+// Rota: Criar email manual
+router.post('/emails/manual', checkApiKey, emailController.createManualEmail.bind(emailController));
+
 // Rota : Visualizar E-mails Pendentes (Tela 2)
 router.get('/emails/pendentes', checkApiKey, emailController.listPendingEmails.bind(emailController));
 

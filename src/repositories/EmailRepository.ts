@@ -2,6 +2,7 @@ import { prisma } from "../../lib/prisma.js"
 import type { Email } from '../../generated/prisma/client.js'; 
 import type { InboundEmailData } from "../types/emailTypes/InboundEmailData.js";
 import type { ClassificationData } from "../types/emailTypes/ClassificationData.js"
+import type { ManualEmailDataWithSystemsFields } from "../types/emailTypes/ManualEmailData.js";
 
 
 export class EmailRepository {
@@ -24,6 +25,20 @@ export class EmailRepository {
 
         return await prisma.email.create({ data: emailToSave });
     }
+
+public async createManualEmail(data: ManualEmailDataWithSystemsFields): Promise<Email> {
+
+    const emailToSave = {
+        remetente: data.remetente,
+        destinatario: data.destinatario,
+        assunto: data.assunto,
+        dataEnvio: data.dataEnvio, 
+        status: data.status,
+        corpoMensagem: data.corpoMensagem ?? "", 
+    };
+
+    return await prisma.email.create({ data: emailToSave as any }); 
+}
 
     public async findAllEmails(): Promise<Email[]> {
         return await prisma.email.findMany({
