@@ -3,7 +3,7 @@
 /dist
 /generated 
 
-# Segredos e Configurações de Ambiente (CRUCIAL)
+# Configurações de Ambiente
 .env
 .env.*
 
@@ -11,9 +11,4 @@
 npm-debug.log*
 yarn-error.log*
 .DS_Store # (Para usuários macOS)
-ngrok.yml
-
-# Arquivos do TypeScript (Se o build for para dist/)
-# /dist é suficiente
-# *.js
-# *.d.ts
+node_modules
