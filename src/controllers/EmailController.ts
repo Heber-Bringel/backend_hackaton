@@ -14,8 +14,11 @@ export class EmailController {
     public async handleInboundWebhook(req: Request, res: Response) {
         const corpoMensagem = req.body["body-plain"] ?? "";
 
-        const remetenteFormatado = extractEmailAddress(req.body.data.remetente);
-        const destinatarioFormatado = extractEmailAddress(req.body.data.destinatario);
+        const remetenteBruto = req.body.From;
+        const destinatrioBruto = req.body.To;
+
+        const remetenteFormatado = extractEmailAddress(remetenteBruto);
+        const destinatarioFormatado = extractEmailAddress(destinatrioBruto);
 
         try {
             const payload = {
