@@ -1,7 +1,8 @@
 import express from 'express';
 import bodyParser from 'body-parser'; 
 import emailRoutes from './routes/EmailRoutes.js';
-import "dotenv"
+import { configDotenv } from 'dotenv';
+configDotenv()
 
 const app = express();
 
@@ -14,7 +15,7 @@ app.use('/api', emailRoutes);
 
 // ... (Configuração de porta e app.listen) ...
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
     console.log("Server is running in port " + PORT);
