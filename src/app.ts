@@ -2,9 +2,33 @@ import express from 'express';
 import bodyParser from 'body-parser'; 
 import emailRoutes from './routes/EmailRoutes.js';
 import { configDotenv } from 'dotenv';
+import cors from 'cors';    
 configDotenv()
 
 const app = express();
+
+const allowedOrigins = [
+    'https://url.com', 
+    'http://localhost:3000' // Para testes locais
+];
+
+const corsOptions: cors.CorsOptions = {
+    origin: (origin, callback) => {
+        // Se a origem for permitida ou se a requisição não tiver origem (ex: Postman), permite.
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Acesso não permitido pelo CORS'));
+        }
+    },
+    // Métodos HTTP que a API aceita
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], 
+    // Headers que o frontend pode enviar (crucial para API Key)
+    allowedHeaders: ['Content-Type', 'Authorization', 'x-api-key'], 
+    credentials: true // Permite o envio de cookies/headers de autenticação
+};
+
+app.use(cors(corsOptions));
 
 // Middleware necessário para Express e Mailgun:
 app.use(bodyParser.json());
