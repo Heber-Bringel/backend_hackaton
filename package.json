@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "tsx watch src/app.ts",
     "start": "node dist/src/app.js",
+    "postinstall": "prisma generate",
     "build": "npx prisma generate && npx tsc",
     "migrate:dev": "npx prisma migrate dev",
     "prisma:generate": "npx prisma generate",
