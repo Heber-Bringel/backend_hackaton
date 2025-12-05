@@ -14,16 +14,16 @@ const emailController = new EmailController(emailService);
 // Rota : Captura Automática (Mailgun Webhook)
 router.post('/webhook/inbound-email', emailController.handleInboundWebhook.bind(emailController));
 
+// Rota : Visualizar E-mails Pendentes (Tela 2)
+router.get('/emails/pendentes', checkApiKey, emailController.listPendingEmails.bind(emailController));
+
 // Rota : Visualizar E-mail por id
 router.get('/emails/:id', checkApiKey, emailController.getEmailById.bind(emailController));
 
 // Rota : Visualizar todos os E-mails
 router.get('/emails/', checkApiKey, emailController.getAllEmails.bind(emailController));
 
-// Rota : Visualizar E-mails Pendentes (Tela 2)
-router.get('/emails/pendentes', checkApiKey, emailController.listPendingEmails.bind(emailController));
-
 // Rota : Classificar E-mail (Tela 2 - Ação de Salvar/Atualizar)
-router.put('/emails/:id/classificar', checkApiKey, emailController.updateClassification.bind(emailController));
+router.put('/emails/classificar/:id', checkApiKey, emailController.updateClassification.bind(emailController));
 
 export default router;
