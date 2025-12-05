@@ -15,7 +15,7 @@ const emailService: EmailService = new EmailService();
 const emailController = new EmailController(emailService);
 
 // Rota : Captura Automática (Mailgun Webhook)
-router.post('/webhook/inbound-email', upload, checkMailgunSignature, emailController.handleInboundWebhook.bind(emailController));
+router.post('/webhook/inbound-email', checkMailgunSignature, upload, emailController.handleInboundWebhook.bind(emailController));
 
 // Rota: Criar email manual
 router.post('/emails/manual', checkApiKey, emailController.createManualEmail.bind(emailController));
