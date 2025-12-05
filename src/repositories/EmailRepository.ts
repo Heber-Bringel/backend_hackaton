@@ -11,9 +11,9 @@ export class EmailRepository {
 
         const emailToSave = {
             remetente: data.sender,
-            destinatario: data.recipient,
+            destinatario: data.to,
             assunto: data.subject,
-            corpoMensagem: data['body-plain'],
+            corpoMensagem: data.body,
             dataEnvio: new Date(timestampMs), 
         };
 

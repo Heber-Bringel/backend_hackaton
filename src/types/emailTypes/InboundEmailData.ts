@@ -1,9 +1,7 @@
 export type InboundEmailData = {
     sender: string;
-    recipient: string;
+    to: string;
     subject: string;
-    'body-plain': string;
+    body: string;
     timestamp: string;
-    signature?: string;
-    token?: string;
 }

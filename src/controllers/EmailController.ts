@@ -10,11 +10,18 @@ export class EmailController {
 
     // POST /webhook/inbound-email
     public async handleInboundWebhook(req: Request, res: Response) {
-        // Implementar Validação de Segurança
-        
         try {
-            const result = await this.emailService.processInboundEmail(req.body);
-            return res.status(200).json(result); 
+            const payload = {
+                sender: req.body.From,
+                to: req.body.To,
+                subject: req.body.subject,
+                body: req.body["body-plain"],
+                timestamp: req.body.timestamp
+            };
+
+            const result = await this.emailService.processInboundEmail(payload);
+            return res.status(200).json(result);
+            
         } catch (error: any) {
             console.error('Erro no webhook:', error);
             return res.status(500).json({ error: 'Falha interna.' });
@@ -42,14 +49,14 @@ export class EmailController {
         }
     }
 
-    public async getEmailById (req: Request, res: Response) {
+    public async getEmailById(req: Request, res: Response) {
         const { id } = req.params;
 
         try {
             const email = await this.emailService.findEmailById(id!);
             return res.status(200).json(email);
         } catch (error: any) {
-            if(error.message.includes("não encontrado")) {
+            if (error.message.includes("não encontrado")) {
                 return res.status(404).json({ error: error.message });
             }
             return res.status(500).json({ error: "Falha ao buscar o e-mail." });
@@ -59,7 +66,7 @@ export class EmailController {
     // PUT /emails/:id/classificar (Tela 2 - Ação de Salvar)
     public async updateClassification(req: Request, res: Response) {
         const { id } = req.params;
-        const { estado, municipio } = req.body; 
+        const { estado, municipio } = req.body;
 
         try {
             const updatedEmail = await this.emailService.classifyEmail(id!, { estado, municipio });
