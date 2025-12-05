@@ -21,7 +21,7 @@ export class EmailService {
     public async findEmailById(id: string): Promise<Email | null> {
         const email = await this.emailRepository.findEmailById(id);
 
-        if(!email) {
+        if(!email || email == null) {
             throw new Error('Email não encontrado.');
         }
         return email;
