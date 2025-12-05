@@ -2,10 +2,14 @@ import express from 'express';
 import emailRoutes from './routes/EmailRoutes.js';
 import { configDotenv } from 'dotenv';
 import cors from 'cors';    
-import type { Request, Response } from 'express';
+import bodyParser from "body-parser"
+
 configDotenv()
 
 const app = express();
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true })); 
 
 const allowedOrigins = [
     'https://url.com', 
@@ -29,13 +33,6 @@ const corsOptions: cors.CorsOptions = {
 };
 
 app.use(cors(corsOptions));
-
-app.use(express.json({ 
-    verify: (req: Request, res: Response, buf: Buffer) => {
-        // Anexa o corpo RAW (como Buffer) para ser usado pelo middleware de segurança
-        (req as any).rawBody = buf;
-    } 
-}));
 
 // Define a rota base /api e anexa o router de e-mails
 app.use('/api', emailRoutes); 
