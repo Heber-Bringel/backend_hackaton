@@ -1,10 +1,9 @@
 export type InboundEmailData = {
     sender: string;
-    recipient: string; // O Mailgun usa 'To' com letra maiúscula
+    recipient: string;
     subject: string;
-    'body-plain': string; // O corpo da mensagem (texto puro)
-    timestamp: string; // Timestamp em formato string (segundos)
-    // Campos de segurança (opcional, mas bom ter para o Service)
+    'body-plain': string;
+    timestamp: string;
     signature?: string;
     token?: string;
 }
