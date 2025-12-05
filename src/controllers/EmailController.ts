@@ -76,7 +76,7 @@ export class EmailController {
         }
     }
 
-    // GET /emails/pendentes (Tela 2)
+    // GET /emails/pendentes
     public async listPendingEmails(req: Request, res: Response) {
         try {
             const emails = await this.emailService.getPendingEmails();
@@ -111,7 +111,7 @@ export class EmailController {
         }
     }
 
-    // PUT /emails/:id/classificar (Tela 2 - Ação de Salvar)
+    // PUT /emails/classificar/:id
     public async updateClassification(req: Request, res: Response) {
         const { id } = req.params;
         const { estado, municipio } = req.body;

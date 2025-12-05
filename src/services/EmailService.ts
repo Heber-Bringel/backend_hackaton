@@ -17,14 +17,14 @@ export class EmailService {
     }
 
     public async saveManualEmail(data: ManualEmailData): Promise<Email> {
-        // 1. Adicionar campos de sistema (Lógica de Negócio)
+        // Adicionar campos de sistema 
         const emailToSave: ManualEmailDataWithSystemsFields = {
             ...data,
             dataEnvio: new Date(), // Data/Hora atual do servidor
             status: 'PENDENTE',    // Status inicial para todos os e-mails manuais
         };
 
-        // 2. Chamar o Repository para salvar
+        // Chamar o Repository para salvar
         const savedEmail = await this.emailRepository.createManualEmail(emailToSave);
 
         return savedEmail;
