@@ -81,4 +81,13 @@ public async createManualEmail(data: ManualEmailDataWithSystemsFields): Promise<
             },
         });
     }
+
+    public async deleteEmailById(id: string): Promise<void> {
+        if(!id) {
+            return;
+        }
+        await prisma.email.delete({
+            where: { id }
+        });
+    } 
 }

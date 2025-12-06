@@ -53,4 +53,8 @@ export class EmailService {
         }
         return this.emailRepository.classifyEmail(id, data);
     }
+
+    public async deleteEmailById(id: string): Promise<void> {
+        await this.emailRepository.deleteEmailById(id);
+    }
 }
