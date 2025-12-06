@@ -30,4 +30,7 @@ router.get('/emails/', checkApiKey, emailController.getAllEmails.bind(emailContr
 // Rota : Classificar E-mail (Tela 2 - Ação de Salvar/Atualizar)
 router.put('/emails/classificar/:id', checkApiKey, emailController.updateClassification.bind(emailController));
 
+// Rota: Deletar E-mail
+router.delete('/emails/:id', checkApiKey, emailController.deleteEmail.bind(emailController));
+
 export default router;
