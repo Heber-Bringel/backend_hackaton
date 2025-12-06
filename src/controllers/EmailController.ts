@@ -127,4 +127,21 @@ export class EmailController {
             return res.status(500).json({ error: 'Falha ao classificar e-mail.' });
         }
     }
+
+    public async deleteEmail(req: Request, res: Response) {
+        const { id } = req.params;
+
+        try {
+            await this.emailService.deleteEmailById(id!);
+            return res.status(204).send();
+        } catch (error: any) {
+            // Prisma not found
+            if (error.code === 'P2025' || error.message?.includes('não encontrado')) {
+                return res.status(404).json({ error: 'Email não encontrado.' });
+            }
+            console.error('Erro ao deletar e-mail:', error);
+            return res.status(500).json({ error: 'Falha ao deletar e-mail.' });
+        }
+    }
+
 }
