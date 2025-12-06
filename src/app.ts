@@ -4,7 +4,10 @@ import { configDotenv } from 'dotenv';
 import cors from 'cors';    
 import bodyParser from "body-parser"
 
-configDotenv()
+configDotenv();
+
+const URL_LOCAL = process.env.URL_LOCAL;
+const URL_PROD = process.env.URL_PROD;
 
 const app = express();
 
@@ -12,8 +15,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); 
 
 const allowedOrigins = [
-    'https://url.com', 
-    'http://localhost:3000' // Para testes locais
+    URL_LOCAL,
+    URL_PROD// Para testes locais
 ];
 
 const corsOptions: cors.CorsOptions = {
