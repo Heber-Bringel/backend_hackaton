@@ -1,5 +1,5 @@
 import { prisma } from "../../lib/prisma.js"
-import type { Email } from '../../generated/prisma/client.js'; 
+import type { Email } from '../../generated/prisma/client.js';
 import type { InboundEmailData } from "../types/emailTypes/InboundEmailData.js";
 import type { ClassificationData } from "../types/emailTypes/ClassificationData.js"
 import type { ManualEmailDataWithSystemsFields } from "../types/emailTypes/ManualEmailData.js";
@@ -15,7 +15,7 @@ export class EmailRepository {
             destinatario: data.destinatario,
             assunto: data.assunto,
             corpoMensagem: data.corpoMensagem,
-            dataEnvio: new Date(timestampMs), 
+            dataEnvio: new Date(timestampMs),
             status: "PENDENTE"
         };
 
@@ -26,19 +26,19 @@ export class EmailRepository {
         return await prisma.email.create({ data: emailToSave });
     }
 
-public async createManualEmail(data: ManualEmailDataWithSystemsFields): Promise<Email> {
+    public async createManualEmail(data: ManualEmailDataWithSystemsFields): Promise<Email> {
 
-    const emailToSave = {
-        remetente: data.remetente,
-        destinatario: data.destinatario,
-        assunto: data.assunto,
-        dataEnvio: data.dataEnvio, 
-        status: data.status,
-        corpoMensagem: data.corpoMensagem ?? "", 
-    };
+        const emailToSave = {
+            remetente: data.remetente,
+            destinatario: data.destinatario,
+            assunto: data.assunto,
+            dataEnvio: data.dataEnvio,
+            status: data.status,
+            corpoMensagem: data.corpoMensagem ?? "",
+        };
 
-    return await prisma.email.create({ data: emailToSave }); 
-}
+        return await prisma.email.create({ data: emailToSave });
+    }
 
     public async findAllEmails(): Promise<Email[]> {
         return await prisma.email.findMany({
@@ -54,7 +54,7 @@ public async createManualEmail(data: ManualEmailDataWithSystemsFields): Promise<
                 id: id,
             }
         });
-        
+
         return email;
     }
 
@@ -77,17 +77,17 @@ public async createManualEmail(data: ManualEmailDataWithSystemsFields): Promise<
             data: {
                 estado: data.estado,
                 municipio: data.municipio,
-                status: 'CLASSIFICADO', 
+                status: 'CLASSIFICADO',
             },
         });
     }
 
     public async deleteEmailById(id: string): Promise<void> {
-        if(!id) {
+        if (!id) {
             return;
         }
         await prisma.email.delete({
             where: { id }
         });
-    } 
+    }
 }

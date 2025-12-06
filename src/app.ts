@@ -6,18 +6,20 @@ import bodyParser from "body-parser"
 
 configDotenv();
 
-const URL_LOCAL = process.env.URL_LOCAL;
-const URL_PROD = process.env.URL_PROD;
-
 const app = express();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); 
 
-const allowedOrigins = [
-    URL_LOCAL,
-    URL_PROD// Para testes locais
-];
+const allowedOrigins: Array<string> = [];
+
+if (process.env.URL_LOCAL) {
+    allowedOrigins.push(process.env.URL_LOCAL);
+}
+
+if (process.env.URL_PROD) {
+    allowedOrigins.push(process.env.URL_PROD);
+}
 
 const corsOptions: cors.CorsOptions = {
     origin: (origin, callback) => {

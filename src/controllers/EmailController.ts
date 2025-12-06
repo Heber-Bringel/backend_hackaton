@@ -143,4 +143,5 @@ export class EmailController {
             return res.status(500).json({ error: 'Falha ao deletar e-mail.' });
         }
     }
+
 }
